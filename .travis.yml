@@ -18,6 +18,7 @@ install:
         cd nim/$NIMVER;
         sh build_all.sh;
         ./koch docs;
+        ln -s doc/html/theindex.html doc/html/index.html;
         rm -rf csources;
         cd ../..;
       }"
@@ -30,8 +31,6 @@ branches:
   except:
     - gh-pages
 
-before_deploy:
-  - ln -s "nim/$NIMVER/doc/html/theindex.html" "nim/$NIMVER/doc/html/index.html"
 deploy:
   provider: pages
   local-dir: "nim/$NIMVER/doc/html"
