@@ -26,9 +26,11 @@ install:
   # - curl https://nim-lang.org/choosenim/init.sh -sSf > init.sh
   # - sh init.sh -y
   # - export PATH=~/.nimble/bin:$PATH
-  - nim -v
   - cd "nim/$NIMVER"
   - ./koch docs
+
+script:
+  - nim -v
 
 branches:
   except:
