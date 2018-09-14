@@ -27,8 +27,6 @@ install:
   # - sh init.sh -y
   # - export PATH=~/.nimble/bin:$PATH
   - nim -v
-
-script:
   - cd "nim/$NIMVER"
   - ./koch docs
 
@@ -37,10 +35,10 @@ branches:
     - gh-pages
 
 before_deploy:
-  - ln -s doc/html/theindex.html doc/html/index.html
+  - ln -s "nim/$NIMVER/doc/html/theindex.html" "nim/$NIMVER/doc/html/index.html"
 deploy:
   provider: pages
-  local-dir: doc/html
+  local-dir: "nim/$NIMVER/doc/html"
   skip-cleanup: true
   github-token: "$GITHUB_OAUTH_TOKEN"
   keep-history: true
