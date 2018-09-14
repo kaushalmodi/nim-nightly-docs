@@ -17,17 +17,11 @@ install:
         git clone --single-branch --branch devel --depth=1 https://github.com/nim-lang/Nim nim/$NIMVER;
         cd nim/$NIMVER;
         sh build_all.sh;
+        ./koch docs;
         rm -rf csources;
         cd ../..;
       }"
   - export PATH="$PWD/nim/$NIMVER/bin:$PATH"
-  # - export CHOOSENIM_NO_ANALYTICS=1
-  # - export CHOOSENIM_CHOOSE_VERSION=devel
-  # - curl https://nim-lang.org/choosenim/init.sh -sSf > init.sh
-  # - sh init.sh -y
-  # - export PATH=~/.nimble/bin:$PATH
-  - cd "nim/$NIMVER"
-  - ./koch docs
 
 script:
   - nim -v
