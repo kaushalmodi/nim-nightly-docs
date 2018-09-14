@@ -1,0 +1,52 @@
+language: c
+sudo: required
+
+cache:
+  directories:
+    - nim
+
+install:
+  - echo "Installing Nim devel .."
+  # Build nim from its devel branch.
+  # Check version of remote branch.
+  - export NIMVER="$(git ls-remote https://github.com/nim-lang/Nim devel | cut -f 1)"
+  # After building nim, wipe csources to save on cache space.
+  - "{ [ -f nim/$NIMVER/bin/nim ] && [ -f nim/$NIMVER/bin/nimble ]; } ||
+      { rm -rf nim;
+        mkdir -p nim;
+        git clone --single-branch --branch devel --depth=1 https://github.com/nim-lang/Nim nim/$NIMVER;
+        cd nim/$NIMVER;
+        sh build_all.sh;
+        rm -rf csources;
+        cd ../..;
+      }"
+  - export PATH="$PWD/nim/$NIMVER/bin:$PATH"
+  # - export CHOOSENIM_NO_ANALYTICS=1
+  # - export CHOOSENIM_CHOOSE_VERSION=devel
+  # - curl https://nim-lang.org/choosenim/init.sh -sSf > init.sh
+  # - sh init.sh -y
+  # - export PATH=~/.nimble/bin:$PATH
+  - nim -v
+
+script:
+  - cd "nim/$NIMVER"
+  - ./koch docs
+
+branches:
+  except:
+    - gh-pages
+
+before_deploy:
+  - ln -s doc/html/theindex.html doc/html/index.html
+deploy:
+  provider: pages
+  local-dir: doc/html
+  skip-cleanup: true
+  github-token: "$GITHUB_OAUTH_TOKEN"
+  keep-history: true
+  on:
+    branch: master
+
+# References:
+# https://github.com/kaushalmodi/hello_musl/blob/master/.travis.yml
+# https://docs.travis-ci.com/user/deployment/pages/
