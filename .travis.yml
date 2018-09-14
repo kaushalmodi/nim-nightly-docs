@@ -18,7 +18,7 @@ install:
         cd nim/$NIMVER;
         sh build_all.sh;
         ./koch docs;
-        ln -s doc/html/theindex.html doc/html/index.html;
+        cp -f ./doc/html/theindex.html ./doc/html/index.html;
         rm -rf csources;
         cd ../..;
       }"
