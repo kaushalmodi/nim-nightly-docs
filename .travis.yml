@@ -6,25 +6,26 @@ cache:
   directories:
     - nim
 
+env:
+  global:
+    - NIMREPO="https://github.com/nim-lang/Nim"
+    - NIMVER="$(git ls-remote ${NIMREPO} devel | cut -f 1)"
+    - NIMDIR="${PWD}/nim/${NIMVER}"
 install:
   - echo "Installing Nim devel .."
-  # Build nim from its devel branch.
-  # Check version of remote branch.
-  - export NIMVER="$(git ls-remote https://github.com/nim-lang/Nim devel | cut -f 1)"
   # After building nim, wipe csources to save on cache space.
-  - "{ [ -f nim/$NIMVER/bin/nim ] && [ -f nim/$NIMVER/bin/nimble ]; } ||
+  - "{ [ -f ${NIMDIR}/bin/nim ] && [ -f ${NIMDIR}/bin/nimble ]; } ||
       { rm -rf nim;
         mkdir -p nim;
-        git clone --single-branch --branch devel --depth=1 https://github.com/nim-lang/Nim nim/$NIMVER;
-        cd nim/$NIMVER;
+        git clone --single-branch --branch devel --depth=1 ${NIMREPO} ${NIMDIR};
+        cd ${NIMDIR};
         sh build_all.sh;
         rm -rf csources;
-        cd ../..;
       }"
-  - export PATH="$PWD/nim/$NIMVER/bin:$PATH"
+  - export PATH="${NIMDIR}/bin:$PATH"
   # koch docs has to be run after nim is added to PATH.
-  - "{ [ -f nim/$NIMVER/doc/html ]; } ||
-      { cd nim/$NIMVER;
+  - "{ [ -f ${NIMDIR}/doc/html ]; } ||
+      { cd ${NIMDIR};
         ./koch docs;
       }"
 
@@ -36,12 +37,12 @@ branches:
     - gh-pages
 
 before_deploy:
-  - cd "nim/$NIMVER"
-  - sed -i 's|</h1>|\0<p>Built from Nim <b>devel</b> commit <a href="https://github.com/nim-lang/Nim/tree/'"$NIMVER"'">'"${NIMVER:0:8}"'</a> on '"$(date)"'.</p>|' ./doc/html/theindex.html
-  - cp -f ./doc/html/theindex.html ./doc/html/index.html
+  - sed -i 's|</h1>|\0<p>Built from Nim <b>devel</b> commit <a href="'"${NIMREPO}/tree/${NIMVER}"'">'"${NIMVER:0:8}"'</a> on '"$(date)"'.</p>|' "${NIMDIR}/doc/html/theindex.html"
+  - cp -f "${NIMDIR}/doc/html/theindex.html" "${NIMDIR}/doc/html/index.html"
 deploy:
   provider: pages
-  local-dir: "nim/$NIMVER/doc/html"
+  # local-dir *has* to be a relative path from the repo root.
+  local-dir: "nim/${NIMVER}/doc/html"
   skip-cleanup: true
   github-token: "$GITHUB_OAUTH_TOKEN"
   keep-history: true
