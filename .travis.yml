@@ -26,7 +26,6 @@ install:
   - "{ [ -f nim/$NIMVER/doc/html ]; } ||
       { cd nim/$NIMVER;
         ./koch docs;
-        cp -f ./doc/html/theindex.html ./doc/html/index.html;
       }"
 
 script:
@@ -36,6 +35,10 @@ branches:
   except:
     - gh-pages
 
+before_deploy:
+  - cd "nim/$NIMVER"
+  - sed -i 's|</h1>|\0<p>Built from Nim <b>devel</b> commit <a href="https://github.com/nim-lang/Nim/tree/'"$NIMVER"'">'"${NIMVER:0:8}"'</a> on '"$(date)"'.</p>|' ./doc/html/theindex.html
+  - cp -f ./doc/html/theindex.html ./doc/html/index.html
 deploy:
   provider: pages
   local-dir: "nim/$NIMVER/doc/html"
