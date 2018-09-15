@@ -17,12 +17,16 @@ install:
         git clone --single-branch --branch devel --depth=1 https://github.com/nim-lang/Nim nim/$NIMVER;
         cd nim/$NIMVER;
         sh build_all.sh;
-        ./koch docs;
-        cp -f ./doc/html/theindex.html ./doc/html/index.html;
         rm -rf csources;
         cd ../..;
       }"
   - export PATH="$PWD/nim/$NIMVER/bin:$PATH"
+  # koch docs has to be run after nim is added to PATH.
+  - "{ [ -f nim/$NIMVER/doc/html ]; } ||
+      { cd nim/$NIMVER;
+        ./koch docs;
+        cp -f ./doc/html/theindex.html ./doc/html/index.html;
+      }"
 
 script:
   - nim -v
