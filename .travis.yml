@@ -28,9 +28,17 @@ install:
       { cd ${NIMDIR};
         ./koch docs;
       }"
+  - echo "Installing htmltest .."
+  - mkdir -p /tmp/htmltest
+  - git clone https://gitlab.com/kaushalmodi/unofficial-hugo-dev-builds.git /tmp/htmltest/bin
+  - tar xf /tmp/htmltest/bin/htmltest_DEV-Linux-64bit.tar.xz -C /tmp/htmltest/bin
+  - export PATH="/tmp/htmltest/bin:$PATH"
 
 script:
   - nim -v
+  # Check for dead links
+  - cd "${NIMDIR}/doc/html"
+  - htmltest .
 
 branches:
   except:
