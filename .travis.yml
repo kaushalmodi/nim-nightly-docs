@@ -24,7 +24,7 @@ install:
       }"
   - export PATH="${NIMDIR}/bin:$PATH"
   # koch docs has to be run after nim is added to PATH.
-  - "{ [ -f ${NIMDIR}/doc/html ]; } ||
+  - "{ [ -d ${NIMDIR}/doc/html ]; } ||
       { cd ${NIMDIR};
         ./koch docs;
       }"
