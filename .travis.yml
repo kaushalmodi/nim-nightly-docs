@@ -23,10 +23,10 @@ install:
         rm -rf csources;
       }"
   - export PATH="${NIMDIR}/bin:$PATH"
-  # koch web can be run only after nim is added to PATH.
+  # koch docs can be run only after nim is added to PATH.
   - "{ [ -d ${NIMDIR}/doc/html ]; } ||
       { cd ${NIMDIR};
-        ./koch web;
+        ./koch docs;
       }"
 
 script:
