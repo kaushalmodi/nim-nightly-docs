@@ -12,7 +12,7 @@ env:
     - NIMVER="$(git ls-remote ${NIMREPO} devel | cut -f 1)"
     - NIMDIR="${PWD}/nim/${NIMVER}"
 install:
-  - echo "Installing Nim devel .."
+  - echo "NIMDIR = ${NIMDIR}"
   # After building nim, wipe csources to save on cache space.
   - "{ [ -f ${NIMDIR}/bin/nim ] && [ -f ${NIMDIR}/bin/nimble ]; } ||
       { rm -rf nim;
