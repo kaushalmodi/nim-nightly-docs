@@ -11,6 +11,7 @@ env:
     - NIMREPO="https://github.com/nim-lang/Nim"
     - NIMVER="$(git ls-remote ${NIMREPO} devel | cut -f 1)"
     - NIMDIR="${PWD}/nim/${NIMVER}"
+
 install:
   - echo "NIMDIR = ${NIMDIR}"
   # After building nim, wipe csources to save on cache space.
