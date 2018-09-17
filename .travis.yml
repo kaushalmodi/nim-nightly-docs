@@ -10,25 +10,25 @@ env:
   global:
     - NIMREPO="https://github.com/nim-lang/Nim"
     - NIMVER="$(git ls-remote ${NIMREPO} devel | cut -f 1)"
-    - NIMDIR="${PWD}/nim/${NIMVER}"
+    - NIMDIR="${TRAVIS_BUILD_DIR}/nim/${NIMVER}"
 
 install:
   - echo "NIMDIR = ${NIMDIR}"
   # After building nim, wipe csources to save on cache space.
   - "{ [ -f ${NIMDIR}/bin/nim ] && [ -f ${NIMDIR}/bin/nimble ]; } ||
-      { rm -rf nim;
+      ( rm -rf nim;
         mkdir -p nim;
         git clone --single-branch --branch devel --depth=1 ${NIMREPO} ${NIMDIR};
         cd ${NIMDIR};
         sh build_all.sh;
         rm -rf csources;
-      }"
-  - export PATH="${NIMDIR}/bin:$PATH"
+      )"
+  - export PATH="${NIMDIR}/bin:${PATH}"
   # koch docs can be run only after nim is added to PATH.
   - "{ [ -d ${NIMDIR}/doc/html ]; } ||
-      { cd ${NIMDIR};
+      ( cd ${NIMDIR};
         ./koch docs;
-      }"
+      )"
 
 script:
   - nim -v
@@ -41,7 +41,7 @@ deploy:
   # local-dir *has* to be a relative path from the repo root.
   local-dir: "nim/${NIMVER}/doc/html"
   skip-cleanup: true
-  github-token: "$GITHUB_OAUTH_TOKEN"
+  github-token: "${GITHUB_OAUTH_TOKEN}"
   keep-history: false
   on:
     branch: master
