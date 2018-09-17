@@ -32,10 +32,6 @@ install:
 script:
   - nim -v
 
-branches:
-  except:
-    - gh-pages
-
 before_deploy:
   - sed -i 's|</h1>|\0<p>Built from Nim <b>devel</b> commit <a href="'"${NIMREPO}/tree/${NIMVER}"'">'"${NIMVER:0:8}"'</a> on '"$(date)"'.</p>|' "${NIMDIR}/doc/html/theindex.html"
   - cp -f "${NIMDIR}/doc/html/theindex.html" "${NIMDIR}/doc/html/index.html"
