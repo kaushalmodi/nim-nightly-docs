@@ -41,7 +41,7 @@ deploy:
   local-dir: "nim/${NIMVER}/doc/html"
   skip-cleanup: true
   github-token: "$GITHUB_OAUTH_TOKEN"
-  keep-history: true
+  keep-history: false
   on:
     branch: master
 
