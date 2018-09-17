@@ -15,14 +15,23 @@ env:
 install:
   - echo "NIMDIR = ${NIMDIR}"
   # After building nim, wipe csources to save on cache space.
-  - "{ [ -f ${NIMDIR}/bin/nim ] && [ -f ${NIMDIR}/bin/nimble ]; } ||
+  - "{ [ -f ${NIMDIR}/bin/nim ]; } ||
       ( rm -rf nim;
         mkdir -p nim;
         git clone --single-branch --branch devel --depth=1 ${NIMREPO} ${NIMDIR};
         cd ${NIMDIR};
-        sh build_all.sh;
+        [ -d csources ] || git clone --depth 1 https://github.com/nim-lang/csources.git;
+        cd csources;
+        sh build.sh;
+        cd ..;
+        ./bin/nim c koch;
+        ./koch boot -d:release;
         rm -rf csources;
       )"
+  # - "{ [ -f ${NIMDIR}/bin/nimble ]; } ||
+  #     ( cd ${NIMDIR};
+  #       ./koch tools;
+  #     )"
   - export PATH="${NIMDIR}/bin:${PATH}"
   # koch docs can be run only after nim is added to PATH.
   - "{ [ -d ${NIMDIR}/doc/html ]; } ||
