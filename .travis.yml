@@ -44,7 +44,7 @@ script:
 
 before_deploy:
   - sed -i 's|</h1>|\0<p>Built from Nim <b>devel</b> commit <a href="'"${NIMREPO}/tree/${NIMVER}"'">'"${NIMVER:0:8}"'</a> on '"$(date)"'.</p>|' "${NIMDIR}/doc/html/overview.html"
-  - cp -f "${NIMDIR}/doc/html/overview.html" "${NIMDIR}/doc/html/index.html"
+  - ln -s "${NIMDIR}/doc/html/overview.html" "${NIMDIR}/doc/html/index.html"
 deploy:
   provider: pages
   # local-dir *has* to be a relative path from the repo root.
