@@ -1,4 +1,10 @@
 #+title: Unofficial nightly builds of Nim docs from devel branch
 #+author: Kaushal Modi
 
-[[https://travis-ci.org/kaushalmodi/nim-nightly-docs][https://travis-ci.org/kaushalmodi/nim-nightly-docs.svg?branch=master]]
+The Travis CI config used in this repo has now been ported to the Nim
+repo in [[https://github.com/nim-lang/Nim/commit/308710c1e22db345a072c56e595e23e5e9ca376a][this commit]].
+
+So this repo has now been archived.
+
+Visit [[https://nim-lang.github.io/Nim/]] for the latest docs built from
+the Nim *devel* branch.
